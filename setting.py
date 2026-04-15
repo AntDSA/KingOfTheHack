@@ -5,7 +5,7 @@ import pygame as p
 # Paramètre du son et du choix des musiques
 
 class Setting:
-   def __init__(self, screen):
+    def __init__(self, screen):
         self.screen = screen
 
         # Taille écran

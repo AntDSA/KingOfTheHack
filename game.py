@@ -7,7 +7,6 @@ import sys
 # il va : lire, mettre à jour et afficher
 
 
-import pygame as p
 
 nouvellePage = False # mettre l'ouverture d'un fichier s'il est vrai 
 class Button:

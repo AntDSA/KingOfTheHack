@@ -1,14 +1,15 @@
 import pygame as p
-from setting import Setting 
+import setting  as s
+# import ennemies as e
 import sys 
 
 # fichier jouant le rôle de cerveau central
 # il va : lire, mettre à jour et afficher
 
-s = Setting()
+
 import pygame as p
 
-
+nouvellePage = False # mettre l'ouverture d'un fichier s'il est vrai 
 class Button:
     def __init__(self, image, x, y):
         self.image = image
@@ -22,13 +23,15 @@ class Button:
         if event.type == p.MOUSEBUTTONDOWN:
             if event.button == 1:  # clic gauche
                 if self.rect.collidepoint(event.pos):
-                    return True
+                    return nouvellePage == True
         return False
     
 class Game():
     def __init__(self):
         p.init()
-        self.screen = p.display.set_mode((s.x,s.y)) 
+        self.width = 800
+        self.height = 900
+        self.screen = p.display.set_mode((self.width,self.height)) 
         self.title = p.display.set_caption("HacKing")
         self.running = True
     
@@ -38,6 +41,6 @@ class Game():
                 if event.type == p.QUIT:
                     self.running = False
                 
-            buttonQuit = p.image.load("Interface et menu/Prinbles_Buttons_Analogue_I (v 1.0.1) (9_5_2023)/Prinbles_Buttons_Analogue_I (v 1.0.1) (9_5_2023)/png/Rect-Dark-Default/Exit.png") # chargement de l'image
+            # buttonQuit = p.image.load("Interface et menu/Prinbles_Buttons_Analogue_I (v 1.0.1) (9_5_2023)/Prinbles_Buttons_Analogue_I (v 1.0.1) (9_5_2023)/png/Rect-Dark-Default/Exit.png") # chargement de l'image
             # Button.click(buttonQuit, 100, 100)
             p.display.flip()

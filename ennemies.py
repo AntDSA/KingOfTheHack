@@ -8,7 +8,7 @@ class ennemieOne():
     def Jacque(self):
         self.degat = 2
         self.nom = "Jacque"
-        
+        # voir si modifier
 
         # si on a une interaction dans un fichier alors boom
     

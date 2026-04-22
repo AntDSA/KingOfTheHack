@@ -4,9 +4,11 @@ import sys
 class Game():
     def __init__(self):
         p.init()
-        self.width = 1200
-        self.height = 800
+        info = p.display.Info()
+        self.width = min(1200, info.current_w - 20)
+        self.height = min(800, info.current_h - 80) 
         self.screen = p.display.set_mode((self.width, self.height))
+        # self.screen = p.display.set_mode((self.width, self.height), p.FULLSCREEN) ## mode fullscreen
         p.display.set_caption("King of the Hack")
         self.clock = p.time.Clock()
         self.running = True
@@ -27,10 +29,11 @@ class Game():
             self.font,
             {"BG": self.BG, "GREEN": self.GREEN}
         )
-
-        # Les modules (on les importera au fur et à mesure)
-        self.bureau = None
-        self.blocnote = None
+        from interface.blocnote import Blocnote
+        self.blocnote = Blocnote(self.screen, self.font, {"BG": self.BG, "GREEN": self.GREEN})
+        self.blocnote.set_mission("Ton PC a été infecté. Suis les instructions.", timer_secondes=120)
+        
+        
         self.mini_jeu_actif = None
 
     def set_state(self, nouvel_etat):
@@ -44,15 +47,16 @@ class Game():
                     p.quit()
                     sys.exit()
                 self.handle_event(event)
-
             self.update()
             self.draw()
             p.display.flip()
-            self.clock.tick(60)
+
+
 
     def handle_event(self, event):
         if self.state == "bureau":
-    self.bureau.handle_event(event, self)
+            self.bureau.handle_event(event, self)
+            self.blocnote.handle_event(event)
             pass  # bureau.handle_event(event) quand bureau.py sera codé
         elif self.state == "labyrinthe":
             pass  # mini_jeu_actif.handle_event(event)
@@ -65,8 +69,11 @@ class Game():
         elif self.state == "fin":
             pass
 
+
     def update(self):
         if self.state == "bureau":
+            dt = self.clock.tick(60) / 1000  # en secondes
+            self.blocnote.update(dt)
             pass
         elif self.state == "labyrinthe":
             pass
@@ -81,7 +88,7 @@ class Game():
 
     def draw(self):
         self.screen.fill(self.BG)
-
+        self.blocnote.draw()
         if self.state == "bureau":
             self.bureau.draw()
             # Temporaire : texte de test
@@ -102,3 +109,4 @@ class Game():
         elif self.state == "fin":
             texte = self.font.render("FIN — le virus a disparu", True, self.GREEN)
             self.screen.blit(texte, (20, 20))
+

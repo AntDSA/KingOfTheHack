@@ -21,6 +21,13 @@ class Game():
         # Police
         self.font = p.font.SysFont("consolas", 20)
 
+        from interface.bureau import Bureau
+        self.bureau = Bureau(
+            self.screen,
+            self.font,
+            {"BG": self.BG, "GREEN": self.GREEN}
+        )
+
         # Les modules (on les importera au fur et à mesure)
         self.bureau = None
         self.blocnote = None
@@ -45,6 +52,7 @@ class Game():
 
     def handle_event(self, event):
         if self.state == "bureau":
+    self.bureau.handle_event(event, self)
             pass  # bureau.handle_event(event) quand bureau.py sera codé
         elif self.state == "labyrinthe":
             pass  # mini_jeu_actif.handle_event(event)
@@ -75,6 +83,7 @@ class Game():
         self.screen.fill(self.BG)
 
         if self.state == "bureau":
+            self.bureau.draw()
             # Temporaire : texte de test
             texte = self.font.render("KING OF THE HACK — bureau", True, self.GREEN)
             self.screen.blit(texte, (20, 20))

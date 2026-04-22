@@ -1,45 +1,95 @@
 import pygame as p
-import setting  as s
-# import ennemies as e
-import sys 
+import sys
 
-# fichier jouant le rôle de cerveau central
-# il va : lire, mettre à jour et afficher
-
-
-
-nouvellePage = False # mettre l'ouverture d'un fichier s'il est vrai 
-class Button:
-    def __init__(self, image, x, y):
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-    def is_clicked(self, event):
-        if event.type == p.MOUSEBUTTONDOWN:
-            if event.button == 1:  # clic gauche
-                if self.rect.collidepoint(event.pos):
-                    return nouvellePage == True
-        return False
-    
 class Game():
     def __init__(self):
         p.init()
-        self.width = 800
-        self.height = 900
-        self.screen = p.display.set_mode((self.width,self.height)) 
-        self.title = p.display.set_caption("HacKing")
+        self.width = 1200
+        self.height = 800
+        self.screen = p.display.set_mode((self.width, self.height))
+        p.display.set_caption("King of the Hack")
+        self.clock = p.time.Clock()
         self.running = True
-    
+
+        # États possibles : "bureau", "labyrinthe", "phishing", "cesar", "sql", "fin"
+        self.state = "bureau"
+
+        # Couleurs
+        self.BG = (13, 13, 13)
+        self.GREEN = (0, 255, 65)
+
+        # Police
+        self.font = p.font.SysFont("consolas", 20)
+
+        # Les modules (on les importera au fur et à mesure)
+        self.bureau = None
+        self.blocnote = None
+        self.mini_jeu_actif = None
+
+    def set_state(self, nouvel_etat):
+        self.state = nouvel_etat
+
     def run(self):
         while self.running:
             for event in p.event.get():
                 if event.type == p.QUIT:
                     self.running = False
-                
-            # buttonQuit = p.image.load("Interface et menu/Prinbles_Buttons_Analogue_I (v 1.0.1) (9_5_2023)/Prinbles_Buttons_Analogue_I (v 1.0.1) (9_5_2023)/png/Rect-Dark-Default/Exit.png") # chargement de l'image
-            # Button.click(buttonQuit, 100, 100)
+                    p.quit()
+                    sys.exit()
+                self.handle_event(event)
+
+            self.update()
+            self.draw()
             p.display.flip()
+            self.clock.tick(60)
+
+    def handle_event(self, event):
+        if self.state == "bureau":
+            pass  # bureau.handle_event(event) quand bureau.py sera codé
+        elif self.state == "labyrinthe":
+            pass  # mini_jeu_actif.handle_event(event)
+        elif self.state == "phishing":
+            pass
+        elif self.state == "cesar":
+            pass
+        elif self.state == "sql":
+            pass
+        elif self.state == "fin":
+            pass
+
+    def update(self):
+        if self.state == "bureau":
+            pass
+        elif self.state == "labyrinthe":
+            pass
+        elif self.state == "phishing":
+            pass
+        elif self.state == "cesar":
+            pass
+        elif self.state == "sql":
+            pass
+        elif self.state == "fin":
+            pass
+
+    def draw(self):
+        self.screen.fill(self.BG)
+
+        if self.state == "bureau":
+            # Temporaire : texte de test
+            texte = self.font.render("KING OF THE HACK — bureau", True, self.GREEN)
+            self.screen.blit(texte, (20, 20))
+        elif self.state == "labyrinthe":
+            texte = self.font.render("LABYRINTHE", True, self.GREEN)
+            self.screen.blit(texte, (20, 20))
+        elif self.state == "phishing":
+            texte = self.font.render("PHISHING", True, self.GREEN)
+            self.screen.blit(texte, (20, 20))
+        elif self.state == "cesar":
+            texte = self.font.render("CESAR", True, self.GREEN)
+            self.screen.blit(texte, (20, 20))
+        elif self.state == "sql":
+            texte = self.font.render("SQL", True, self.GREEN)
+            self.screen.blit(texte, (20, 20))
+        elif self.state == "fin":
+            texte = self.font.render("FIN — le virus a disparu", True, self.GREEN)
+            self.screen.blit(texte, (20, 20))

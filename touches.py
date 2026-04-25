@@ -12,18 +12,14 @@ class Settings:
 
         self.clock = p.time.Clock()
 
-        # Paramètres
         self.volume = 0.5
         self.dark_mode = True
 
-        # Police
         self.font = p.font.SysFont("consolas", 30)
 
-        # Couleurs
         self.bg_color = (0, 0, 0)
         self.text_color = (0, 255, 0)
 
-        # Contrôles du jeu
         self.controls = {
             "UP": p.K_z,
             "DOWN": p.K_s,
@@ -37,7 +33,6 @@ class Settings:
         self.actions_list = list(self.controls.keys())
 
     def draw(self):
-        # Mode couleur
         if self.dark_mode:
             self.bg_color = (0, 0, 0)
             self.text_color = (0, 255, 0)
@@ -47,7 +42,6 @@ class Settings:
 
         self.screen.fill(self.bg_color)
 
-        # Textes principaux
         title = self.font.render("SETTINGS", True, self.text_color)
         volume = self.font.render(f"Volume : {int(self.volume * 100)}%", True, self.text_color)
         mode = self.font.render(f"Mode : {'Dark' if self.dark_mode else 'Light'}", True, self.text_color)
@@ -58,7 +52,6 @@ class Settings:
         self.screen.blit(mode, (400, 200))
         self.screen.blit(resolution, (400, 250))
 
-        # Controls
         controls_title = self.font.render("Controls :", True, self.text_color)
         self.screen.blit(controls_title, (400, 320))
 
@@ -67,7 +60,6 @@ class Settings:
             key = self.controls[action]
             key_name = p.key.name(key)
 
-            # Sélection visuelle
             prefix = "-> " if i == self.selected_action else "   "
 
             text = self.font.render(f"{prefix}{action} : {key_name}", True, self.text_color)
@@ -88,14 +80,13 @@ class Settings:
     def handle_event(self, event):
         if event.type == p.KEYDOWN:
 
-            # Modifier une touche
+            # Modif touche
             if self.waiting_for_key:
                 action = self.actions_list[self.selected_action]
                 self.controls[action] = event.key
                 self.waiting_for_key = None
                 return
 
-            # Navigation
             if event.key == p.K_UP:
                 self.selected_action = (self.selected_action - 1) % len(self.actions_list)
 
@@ -105,7 +96,6 @@ class Settings:
             elif event.key == p.K_RETURN:
                 self.waiting_for_key = True
 
-            # Volume
             elif event.key == p.K_RIGHT:
                 self.volume = min(1.0, self.volume + 0.1)
                 p.mixer.music.set_volume(self.volume)
@@ -114,11 +104,9 @@ class Settings:
                 self.volume = max(0.0, self.volume - 0.1)
                 p.mixer.music.set_volume(self.volume)
 
-            # Mode sombre
             elif event.key == p.K_m:
                 self.dark_mode = not self.dark_mode
 
-            # Résolution
             elif event.key == p.K_r:
                 if self.width == 1200:
                     self.width, self.height = 800, 600
@@ -130,7 +118,6 @@ class Settings:
     def run(self):
         running = True
 
-        # Exemple objet joueur
         player = p.Rect(600, 400, 50, 50)
 
         while running:
@@ -143,7 +130,6 @@ class Settings:
 
                 self.handle_event(event)
 
-            # Déplacement joueur avec touches personnalisées
             keys = p.key.get_pressed()
 
             if not self.waiting_for_key:
@@ -155,8 +141,7 @@ class Settings:
                     player.x -= 5
                 if keys[self.controls["RIGHT"]]:
                     player.x += 5
-
-            # Affichage
+                    
             self.draw()
 
             # Dessin joueur
@@ -168,6 +153,6 @@ class Settings:
         p.quit()
 
 
-# Lancer le menu
+
 if __name__ == "__main__":
     Settings().run()

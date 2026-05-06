@@ -48,9 +48,16 @@ class Setting:
         self.screen.blit(resolution, (400, 390))
         self.screen.blit(back, (400, 500))
 
+        # Musique et Son
+        #######sound = pygame.mixer.Sound("something in my pc in my house")
     def handle_event(self, event):
+        
         if event.type == p.KEYDOWN:
-
+            
+            # Son_clavier
+            #######sound.play()
+            
+            
             # Volume
             if event.key == p.K_UP:
                 self.volume = min(1.0, self.volume + 0.1)

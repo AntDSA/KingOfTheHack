@@ -20,6 +20,10 @@ class Blocnote():
         self.timer_actif = False
         self.jauge = 0          # 0 à 100
         self.saisie = ""        # ce que le joueur tape
+        
+        #boutons 
+        self.btn_home = p.Rect(self.x, self.y + self.hauteur + 10, 80, 30)
+        self.btn_retour = p.Rect(self.x + 90, self.y + self.hauteur + 10, 80, 30)
 
     def set_mission(self, texte, timer_secondes=0):
         self.mission_texte = texte

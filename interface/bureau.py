@@ -32,10 +32,6 @@ class Bureau():
         pass
 
     def draw(self):
-        # Titre
-        titre = self.font.render("KING OF THE HACK", True, self.GREEN)
-        self.screen.blit(titre, (20, 20))
-
         # Icônes
         for icone in self.icones:
             # Bordure si survol

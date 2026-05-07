@@ -7,6 +7,7 @@ class Blocnote():
         self.GREEN = colors["GREEN"]
         self.BG = colors["BG"]
 
+
         # Position et taille — haut droite
         self.largeur = 350
         self.hauteur = 400
@@ -20,11 +21,11 @@ class Blocnote():
         self.timer_actif = False
         self.jauge = 0          # 0 à 100
         self.saisie = ""        # ce que le joueur tape
-        
+
         #boutons 
         self.btn_home = p.Rect(self.x, self.y + self.hauteur + 10, 80, 30)
         self.btn_retour = p.Rect(self.x + 90, self.y + self.hauteur + 10, 80, 30)
-
+        
     def set_mission(self, texte, timer_secondes=0):
         self.mission_texte = texte
         self.timer = timer_secondes
@@ -50,6 +51,11 @@ class Blocnote():
                 return reponse  # renvoie la réponse au gestionnaire
             else:
                 self.saisie += event.unicode
+        if event.type == p.MOUSEBUTTONDOWN and event.button == 1:
+            if self.btn_home.collidepoint(event.pos):
+                return "home"
+            if self.btn_retour.collidepoint(event.pos):
+                return "retour"        
         return None
 
     def draw(self):
@@ -58,7 +64,7 @@ class Blocnote():
         p.draw.rect(self.screen, self.GREEN, self.rect, 1)
 
         # Titre
-        titre = self.font.render("[ BLOC-NOTE VIRUS ]", True, self.GREEN)
+        titre = self.font.render("[ BLOC-NOTE ]", True, self.GREEN)
         self.screen.blit(titre, (self.x + 10, self.y + 10))
 
         # Séparateur
@@ -107,3 +113,15 @@ class Blocnote():
         self.screen.blit(saisie_label, (self.x + 10, self.y + 330))
         saisie_surf = self.font.render("> " + self.saisie + "_", True, self.GREEN)
         self.screen.blit(saisie_surf, (self.x + 10, self.y + 355))
+
+        # Bouton Home
+        p.draw.rect(self.screen, (20, 20, 20), self.btn_home)
+        p.draw.rect(self.screen, self.GREEN, self.btn_home, 1)
+        home_surf = self.font.render("[Home]", True, self.GREEN)
+        self.screen.blit(home_surf, (self.btn_home.x + 5, self.btn_home.y + 5))
+
+        # Bouton Retour
+        p.draw.rect(self.screen, (20, 20, 20), self.btn_retour)
+        p.draw.rect(self.screen, self.GREEN, self.btn_retour, 1)
+        retour_surf = self.font.render("[<--]", True, self.GREEN)
+        self.screen.blit(retour_surf, (self.btn_retour.x + 5, self.btn_retour.y + 5))

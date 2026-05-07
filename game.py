@@ -37,23 +37,31 @@ class Game():
         self.mini_jeu_actif = None
 
     def set_state(self, nouvel_etat):
+        self.state_precedent = self.state
         self.state = nouvel_etat
 
     def run(self):
         while self.running:
+            dt = self.clock.tick(60) / 1000
             for event in p.event.get():
                 if event.type == p.QUIT:
                     self.running = False
                     p.quit()
                     sys.exit()
                 self.handle_event(event)
-            self.update()
+            self.update(dt)
             self.draw()
             p.display.flip()
 
 
 
     def handle_event(self, event):
+        action = self.blocnote.handle_event(event)
+        if action == "home":
+            self.set_state("bureau")
+        elif action == "retour":
+            self.set_state(self.state_precedent)
+        
         if self.state == "bureau":
             self.bureau.handle_event(event, self)
             self.blocnote.handle_event(event)
@@ -70,10 +78,9 @@ class Game():
             pass
 
 
-    def update(self):
-        if self.state == "bureau":
-            dt = self.clock.tick(60) / 1000  # en secondes
-            self.blocnote.update(dt)
+    def update(self, dt):
+        self.blocnote.update(dt)
+        if self.state == "bureau": 
             pass
         elif self.state == "labyrinthe":
             pass
@@ -88,12 +95,9 @@ class Game():
 
     def draw(self):
         self.screen.fill(self.BG)
-        self.blocnote.draw()
+
         if self.state == "bureau":
             self.bureau.draw()
-            # Temporaire : texte de test
-            texte = self.font.render("KING OF THE HACK — bureau", True, self.GREEN)
-            self.screen.blit(texte, (20, 20))
         elif self.state == "labyrinthe":
             texte = self.font.render("LABYRINTHE", True, self.GREEN)
             self.screen.blit(texte, (20, 20))
@@ -109,4 +113,5 @@ class Game():
         elif self.state == "fin":
             texte = self.font.render("FIN — le virus a disparu", True, self.GREEN)
             self.screen.blit(texte, (20, 20))
+        self.blocnote.draw()
 

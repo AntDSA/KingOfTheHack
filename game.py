@@ -1,5 +1,6 @@
 import pygame as p
 import sys
+import setting
 
 class Game():
     def __init__(self):
@@ -8,6 +9,7 @@ class Game():
         self.width = min(1200, info.current_w - 20)
         self.height = min(800, info.current_h - 80) 
         self.screen = p.display.set_mode((self.width, self.height))
+        
         # self.screen = p.display.set_mode((self.width, self.height), p.FULLSCREEN) ## mode fullscreen
         p.display.set_caption("King of the Hack")
         self.clock = p.time.Clock()
@@ -33,6 +35,7 @@ class Game():
         self.blocnote = Blocnote(self.screen, self.font, {"BG": self.BG, "GREEN": self.GREEN})
         self.blocnote.set_mission("Ton PC a été infecté. Suis les instructions.", timer_secondes=120)
         
+        s = setting.Setting(self.screen)
         
         self.mini_jeu_actif = None
 

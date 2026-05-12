@@ -115,3 +115,4 @@ class Game():
             self.screen.blit(texte, (20, 20))
         self.blocnote.draw()
 
+#lsjflm<j qsldkj<mlds qklsdjqmls njqiosjmlqjmqJMLQSDJ QLMJMLQKJ

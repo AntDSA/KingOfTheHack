@@ -205,7 +205,7 @@ class Explorateur:
             return  # on consomme l'événement clavier
 
     def update(self):
-        pass
+        pass # pas d'animation, tout est dans le draw
 
     def draw(self):
         # Fond du panel

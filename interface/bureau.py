@@ -25,10 +25,12 @@ class Bureau():
                         p.quit()
                         sys.exit()
                     elif icone["cible"] == "labyrinthe":
-                        from data.filesystems import LABYRINTHE_1
-                        game.lancer_labyrinthe(LABYRINTHE_1, 8, "Infiltre le système. Trouve le bon chemin.")
-                    else:
-                        game.set_state(icone["cible"])
+                        from data.filesystems import SELECTION_FICHIERS
+                        game.lancer_labyrinthe(
+                            SELECTION_FICHIERS, 
+                            8, 
+                            "Ouvre le bon dossier pour commencer ta mission."
+                        )
 
     def update(self):
         pass

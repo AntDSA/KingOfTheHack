@@ -3,7 +3,8 @@ import sys
 import setting
 from interface.bureau import Bureau
 from interface.blocnote import Blocnote
-from minijeux.labyrinthe import Explorateur
+from minijeux.labyrinthe import Labyrinthe
+from data.filesystems import LABYRINTHE_1, LABYRINTHE_2, LABYRINTHE_3
 
 class Game():
     def __init__(self):
@@ -31,7 +32,8 @@ class Game():
         self.blocnote.set_mission("Ton PC a été infecté. Suis les instructions.", timer_secondes=120)
 
         self.setting     = setting.Setting(self.screen)
-        self.explorateur = Explorateur(self.screen, self.font, colors)
+        self.labyrinthe = None  # sera créé au lancement d'une mission
+        self.mission_points = 0
 
     def set_state(self, nouvel_etat):
         self.state_precedent = self.state
@@ -60,7 +62,7 @@ class Game():
         if self.state == "bureau":
             self.bureau.handle_event(event, self)
         elif self.state == "labyrinthe":
-            self.explorateur.handle_event(event, self)
+            self.labyrinthe.handle_event(event, self)
         elif self.state == "phishing":
             pass
         elif self.state == "cesar":
@@ -73,7 +75,7 @@ class Game():
     def update(self, dt):
         self.blocnote.update(dt)
         if self.state == "labyrinthe":
-            self.explorateur.update()
+            self.labyrinthe.update()
 
     def draw(self):
         self.screen.fill(self.BG)
@@ -89,7 +91,7 @@ class Game():
         if self.state == "bureau":
             self.bureau.draw()
         elif self.state == "labyrinthe":
-            self.explorateur.draw()
+            self.labyrinthe.draw()
         elif self.state in ecrans_simples:
             self.screen.blit(
                 self.font.render(ecrans_simples[self.state], True, self.GREEN),
@@ -98,3 +100,13 @@ class Game():
 
         self.blocnote.draw()
 
+    def lancer_labyrinthe(self, arbre, points, texte):
+        from minijeux.labyrinthe import Labyrinthe
+        self.labyrinthe = Labyrinthe(
+            self.screen, self.font,
+            {"BG": self.BG, "GREEN": self.GREEN},
+            arbre, self
+        )
+        self.mission_points = points
+        self.blocnote.set_mission(texte, timer_secondes=120)
+        self.set_state("labyrinthe")

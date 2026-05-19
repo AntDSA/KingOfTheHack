@@ -24,6 +24,9 @@ class Bureau():
                     if icone["cible"] == "quitter":
                         p.quit()
                         sys.exit()
+                    elif icone["cible"] == "labyrinthe":
+                        from data.filesystems import LABYRINTHE_1
+                        game.lancer_labyrinthe(LABYRINTHE_1, 8, "Infiltre le système. Trouve le bon chemin.")
                     else:
                         game.set_state(icone["cible"])
 

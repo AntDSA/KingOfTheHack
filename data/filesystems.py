@@ -93,5 +93,3 @@ LABYRINTHE_3 = {
         }
     }
 }
-DeprecationWarningKDML
-DKSQ

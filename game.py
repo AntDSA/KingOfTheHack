@@ -33,7 +33,7 @@ class Game():
         self.blocnote = Blocnote(self.screen, self.font, colors)
         self.blocnote.set_mission("Ton PC a été infecté. Suis les instructions.", timer_secondes=120)
 
-        self.setting     = setting.Setting(self.screen)
+        self.setting = setting.Setting(self.screen)
         self.labyrinthe = None  # sera créé au lancement d'une mission
         self.mission_points = 0
 

@@ -12,4 +12,4 @@ class phishing():
 
 
     def draw(self):
-        self
+        self lkjhklwsdklsj

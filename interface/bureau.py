@@ -27,6 +27,8 @@ class Bureau():
                     elif icone["cible"] == "labyrinthe":
                         from data.filesystems import LABYRINTHE_1
                         game.lancer_labyrinthe(LABYRINTHE_1, 8, "Infiltre le système. Trouve le bon chemin.")
+                    elif icone["cible"] == "phishing":
+                        game.lancer_phishing(5, "Identifie les mails de phishing pour gagner des points.")
                     else:
                         game.set_state(icone["cible"])
 

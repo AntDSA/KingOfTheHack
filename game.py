@@ -4,6 +4,7 @@ import setting
 from interface.bureau import Bureau
 from interface.blocnote import Blocnote
 from minijeux.labyrinthe import Labyrinthe
+from minijeux.phishing import Phishing
 from data.filesystems import LABYRINTHE_1, LABYRINTHE_2, LABYRINTHE_3
 
 class Game():
@@ -33,6 +34,7 @@ class Game():
 
         self.setting = setting.Setting(self.screen)
         self.labyrinthe = None  # sera créé au lancement d'une mission
+        self.phishing = None  # sera créé au lancement d'une mission
         self.mission_points = 0
 
     def set_state(self, nouvel_etat):
@@ -64,7 +66,8 @@ class Game():
         elif self.state == "labyrinthe":
             self.labyrinthe.handle_event(event, self)
         elif self.state == "phishing":
-            pass
+            self.phishing.handle_event(event, self)
+            
         elif self.state == "cesar":
             pass
         elif self.state == "sql":
@@ -76,6 +79,8 @@ class Game():
         self.blocnote.update(dt)
         if self.state == "labyrinthe":
             self.labyrinthe.update()
+        elif self.state == "phishing":
+            self.phishing.update()
 
     def draw(self):
         self.screen.fill(self.BG)
@@ -92,6 +97,8 @@ class Game():
             self.bureau.draw()
         elif self.state == "labyrinthe":
             self.labyrinthe.draw()
+        elif self.state == "phishing":
+            self.phishing.draw()
         elif self.state in ecrans_simples:
             self.screen.blit(
                 self.font.render(ecrans_simples[self.state], True, self.GREEN),
@@ -107,6 +114,28 @@ class Game():
             {"BG": self.BG, "GREEN": self.GREEN},
             arbre, self
         )
+
         self.mission_points = points
         self.blocnote.set_mission(texte, timer_secondes=120)
         self.set_state("labyrinthe")
+
+    def lancer_phishing(self, points, texte):
+        self.phishing = Phishing(
+            self.screen, self.font,
+            {"BG": self.BG, "GREEN": self.GREEN},
+             self
+        )
+
+        self.mission_points = points
+        self.blocnote.set_mission(texte, timer_secondes=120)
+        self.set_state("phishing")
+    def lancer_phishing(self, points, texte):
+        self.phishing = Phishing(
+            self.screen, self.font,
+            {"BG": self.BG, "GREEN": self.GREEN},
+            None, self
+        )
+
+        self.mission_points = points
+        self.blocnote.set_mission(texte, timer_secondes=120)
+        self.set_state("phishing")

@@ -25,6 +25,10 @@ class Blocnote():
         #boutons 
         self.btn_home = p.Rect(self.x, self.y + self.hauteur + 10, 80, 30)
         self.btn_retour = p.Rect(self.x + 90, self.y + self.hauteur + 10, 80, 30)
+        # Boutons de choix de mission
+        self.btn_lab = p.Rect(self.x, self.y + self.hauteur + 50, 160, 30)
+        self.btn_phi = p.Rect(self.x + 170, self.y + self.hauteur + 50, 160, 30)
+        self.afficher_choix = True  # True quand on est sur le bureau sans mission active
         
     def set_mission(self, texte, timer_secondes=0):
         self.mission_texte = texte
@@ -48,14 +52,19 @@ class Blocnote():
             elif event.key == p.K_RETURN:
                 reponse = self.saisie
                 self.saisie = ""
-                return reponse  # renvoie la réponse au gestionnaire
+                return reponse
             else:
                 self.saisie += event.unicode
         if event.type == p.MOUSEBUTTONDOWN and event.button == 1:
             if self.btn_home.collidepoint(event.pos):
                 return "home"
             if self.btn_retour.collidepoint(event.pos):
-                return "retour"        
+                return "retour"
+            if self.afficher_choix:
+                if self.btn_lab.collidepoint(event.pos):
+                    return "mission_labyrinthe"
+                if self.btn_phi.collidepoint(event.pos):
+                    return "mission_phishing"
         return None
 
     def draw(self):
@@ -125,3 +134,19 @@ class Blocnote():
         p.draw.rect(self.screen, self.GREEN, self.btn_retour, 1)
         retour_surf = self.font.render("[<--]", True, self.GREEN)
         self.screen.blit(retour_surf, (self.btn_retour.x + 5, self.btn_retour.y + 5))
+        
+        if self.afficher_choix:
+            # Bouton Labyrinthe
+            p.draw.rect(self.screen, (20, 20, 20), self.btn_lab)
+            p.draw.rect(self.screen, self.GREEN, self.btn_lab, 1)
+            self.screen.blit(
+                self.font.render("[Labyrinthe]", True, self.GREEN),
+                (self.btn_lab.x + 5, self.btn_lab.y + 5)
+            )
+            # Bouton Phishing
+            p.draw.rect(self.screen, (20, 20, 20), self.btn_phi)
+            p.draw.rect(self.screen, self.GREEN, self.btn_phi, 1)
+            self.screen.blit(
+                self.font.render("[Phishing]", True, self.GREEN),
+                (self.btn_phi.x + 5, self.btn_phi.y + 5)
+            )

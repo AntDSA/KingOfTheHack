@@ -4,6 +4,8 @@ import setting
 from interface.bureau import Bureau
 from interface.blocnote import Blocnote
 from minijeux.labyrinthe import Labyrinthe
+import random
+from data.missions import MISSIONS_LABYRINTHE, MAILS
 from data.filesystems import LABYRINTHE_1, LABYRINTHE_2, LABYRINTHE_3
 
 class Game():
@@ -35,6 +37,15 @@ class Game():
         self.labyrinthe = None  # sera créé au lancement d'une mission
         self.mission_points = 0
 
+        self.missions_faites = []  # missions déjà complétées
+        self.mission_active = None
+
+        self.arbre_map = {
+            "LABYRINTHE_1": LABYRINTHE_1,
+            "LABYRINTHE_2": LABYRINTHE_2,
+            "LABYRINTHE_3": LABYRINTHE_3,
+}
+
     def set_state(self, nouvel_etat):
         self.state_precedent = self.state
         self.state = nouvel_etat
@@ -56,9 +67,15 @@ class Game():
         action = self.blocnote.handle_event(event)
         if action == "home":
             self.set_state("bureau")
+            self.blocnote.afficher_choix = True
         elif action == "retour":
             self.set_state(self.state_precedent)
-
+            self.blocnote.afficher_choix = True
+        elif action == "mission_labyrinthe":
+            self.lancer_mission_labyrinthe()
+        elif action == "mission_phishing":
+            self.lancer_mission_phishing()
+        
         if self.state == "bureau":
             self.bureau.handle_event(event, self)
         elif self.state == "labyrinthe":
@@ -110,3 +127,32 @@ class Game():
         self.mission_points = points
         self.blocnote.set_mission(texte, timer_secondes=120)
         self.set_state("labyrinthe")
+    
+    def lancer_mission_labyrinthe(self):
+        disponibles = [k for k in MISSIONS_LABYRINTHE if k not in self.missions_faites]
+        if not disponibles:
+            self.missions_faites = []  # reset si tout fait
+            disponibles = list(MISSIONS_LABYRINTHE.keys())
+        
+        cle = random.choice(disponibles)
+        mission = MISSIONS_LABYRINTHE[cle]
+        self.mission_active = cle
+        self.blocnote.afficher_choix = False
+        
+        arbre = self.arbre_map[mission["filesystem"]]
+        self.lancer_labyrinthe(arbre, mission["points"], mission["texte_blocnote"])
+
+    def lancer_mission_phishing(self):
+        disponibles = [k for k in MAILS if k not in self.missions_faites]
+        if not disponibles:
+            self.missions_faites = []
+            disponibles = list(MAILS.keys())
+        
+        cle = random.choice(disponibles)
+        mail = MAILS[cle]
+        self.mission_active = cle
+        self.blocnote.afficher_choix = False
+        self.blocnote.set_mission(mail["question"], timer_secondes=120)
+        self.set_state("phishing")
+        # on stocke le mail actif pour que phishing.py puisse y accéder
+        self.mail_actif = mail

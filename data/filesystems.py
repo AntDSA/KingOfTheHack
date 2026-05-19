@@ -93,3 +93,9 @@ LABYRINTHE_3 = {
         }
     }
 }
+
+SELECTION_FICHIERS = {
+    "Labyrinthe_Bienvenue": LABYRINTHE_1,
+    "Labyrinthe_Systeme_Compromis": LABYRINTHE_2,
+    "Labyrinthe_Acces_Restreint": LABYRINTHE_3,
+}

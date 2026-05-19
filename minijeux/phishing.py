@@ -19,6 +19,7 @@ class Phishing():
         w, h = screen.get_width(), screen.get_height()
         panel_w = w - 400
         self.rect_panel = p.Rect(0, 0, panel_w, h)
+        self.rect_titre = p.Rect(MARGE, MARGE, panel_w - 2*MARGE, 30)
 
     def handle_event(self, event, game):
         pass
@@ -36,6 +37,6 @@ class Phishing():
 
         # Titre
         self.screen.blit(
-            self.font.render("[ LABYRINTHE DE FICHIERS ]", True, self.GREEN),
+            self.font.render("[ Essai de Phishing / Erreur de scroll ]", True, self.GREEN),
             (self.rect_titre.x, self.rect_titre.y)
         )

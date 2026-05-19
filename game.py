@@ -123,7 +123,7 @@ class Game():
         self.phishing = Phishing(
             self.screen, self.font,
             {"BG": self.BG, "GREEN": self.GREEN},
-             self
+            self
         )
 
         self.mission_points = points
@@ -133,7 +133,7 @@ class Game():
         self.phishing = Phishing(
             self.screen, self.font,
             {"BG": self.BG, "GREEN": self.GREEN},
-            None, self
+            None
         )
 
         self.mission_points = points

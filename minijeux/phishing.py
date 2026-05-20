@@ -130,6 +130,7 @@ class phishing:
             p.draw.rect(self.screen, (30, 60, 30), self.rect_retour)
             p.draw.rect(self.screen, self.GREEN, self.rect_retour, 1)
 
+            # Super pratique le btn retour. Regarde self.rect_retour et la logique dans handle_event
             self.screen.blit(
                 self.font.render("RETURN", True, self.GREEN),
                 (self.rect_retour.x + 10, self.rect_retour.y + 8)
@@ -144,10 +145,12 @@ class phishing:
         total_h = len(items) * LIGNE_H
         max_scroll = max(0, total_h - self.rect_liste.height)
 
+        # On s'assure que le scroll ne dépasse pas les limites
         self.scroll_offset = max(0, min(self.scroll_offset, max_scroll))
 
         self.screen.set_clip(self.rect_liste)
 
+        # Liste des mails 
         for i, nom in enumerate(items):
 
             rect = self._rect_items(i)

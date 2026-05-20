@@ -1,3 +1,5 @@
+# Bon on pouvait utiliser /n pour eviter une boucle dans phising. 
+
 MAILS = {
     "A1": {
         "expediteur": "contact@maif-espace-client.fr",

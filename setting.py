@@ -1,5 +1,5 @@
 import pygame as p
-
+# encore test github
 class Setting:
     def __init__(self, screen):
         self.screen = screen

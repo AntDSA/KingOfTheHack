@@ -8,6 +8,7 @@ import random
 from data.missions import MISSIONS_LABYRINTHE, MAILS
 from data.filesystems import LABYRINTHE_1, LABYRINTHE_2, LABYRINTHE_3
 
+# test modif pour github
 class Game():
     def __init__(self):
         p.init()

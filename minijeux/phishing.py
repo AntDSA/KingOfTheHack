@@ -16,9 +16,10 @@ class Phishing():
         self.BG     = colors["BG"]
         self.game   = game
 
-        w, h = screen.get_width(), screen.get_height()
-        panel_w = w - 400
-        self.rect_panel = p.Rect(0, 0, panel_w, h)
+        self.w, self.h = screen.get_width(), screen.get_height()
+        panel_w = self.w - 400
+        self.rect_panel = p.Rect(0, 0, panel_w, self.h)
+        self.rect_panel2 = p.Rect(50, HEADER_H, panel_w - 100, self.h - HEADER_H)
         self.rect_titre = p.Rect(MARGE, MARGE, panel_w - 2*MARGE, 30)
 
 
@@ -51,7 +52,12 @@ class Phishing():
     def draw(self):
         p.draw.rect(self.screen, (15, 15, 15), self.rect_panel)
         p.draw.rect(self.screen, self.GREEN, self.rect_panel, 1)
+        p.draw.rect(self.screen, self.GREEN, self.rect_panel2, 1)
 
+        # Mail
+        
+        # Contenue du mail
+    
         # Titre
         self.screen.blit(
             self.font.render("[ Essai de Phishing / Erreur de scroll ]", True, self.GREEN),

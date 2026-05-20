@@ -7,10 +7,9 @@
 #créer un nouveau fichier et le relier à game  
 #Mission : Faire une page de paramètre qui interagit avec setting 
 
-# fichier : parametre_page.py
 
 import pygame as p
-from parametre import Setting
+from parametre import setting
 
 class ParametrePage:
 

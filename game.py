@@ -3,7 +3,7 @@ import sys
 import setting
 from interface.bureau import Bureau
 from interface.blocnote import Blocnote
-from minijeux.labyrinthe import Labyrinthe
+
 import random
 from data.missions import MISSIONS_LABYRINTHE, MAILS
 from data.filesystems import LABYRINTHE_1, LABYRINTHE_2, LABYRINTHE_3
@@ -35,6 +35,7 @@ class Game():
 
         self.setting = setting.Setting(self.screen)
         self.labyrinthe = None  # sera créé au lancement d'une mission
+        self.phishing = None     # sera créé au lancement d'une mission
         self.mission_points = 0
 
         self.missions_faites = []  # missions déjà complétées
@@ -81,7 +82,7 @@ class Game():
         elif self.state == "labyrinthe":
             self.labyrinthe.handle_event(event, self)
         elif self.state == "phishing":
-            pass
+            self.phishing.handle_event(event)
         elif self.state == "cesar":
             pass
         elif self.state == "sql":
@@ -93,6 +94,8 @@ class Game():
         self.blocnote.update(dt)
         if self.state == "labyrinthe":
             self.labyrinthe.update()
+        elif self.state == "phishing":
+            self.phishing.update()
 
     def draw(self):
         self.screen.fill(self.BG)
@@ -109,6 +112,8 @@ class Game():
             self.bureau.draw()
         elif self.state == "labyrinthe":
             self.labyrinthe.draw()
+        elif self.state == "phishing":
+            self.phishing.draw()
         elif self.state in ecrans_simples:
             self.screen.blit(
                 self.font.render(ecrans_simples[self.state], True, self.GREEN),
@@ -117,7 +122,27 @@ class Game():
 
         self.blocnote.draw()
 
-    def lancer_labyrinthe(self, arbre, points, texte):
+    def lancer_phishing(self, mails, points, texte):
+        from minijeux.phishing import phishing
+
+        self.phishing = phishing(
+            self.screen,
+            self.font,
+            {
+                "BG": self.BG,
+                "GREEN": self.GREEN
+            },
+            mails,
+            self
+        )
+
+        self.mission_points = points
+        self.blocnote.set_mission(texte, timer_secondes=120)
+        self.set_state("phishing")
+
+
+
+    def lancer_labyrinthe(self, arbre, points):
         from minijeux.labyrinthe import Labyrinthe
         self.labyrinthe = Labyrinthe(
             self.screen, self.font,
@@ -127,6 +152,8 @@ class Game():
         self.mission_points = points
         self.blocnote.set_mission(texte, timer_secondes=120)
         self.set_state("labyrinthe")
+    
+    
     
     def lancer_mission_labyrinthe(self):
         disponibles = [k for k in MISSIONS_LABYRINTHE if k not in self.missions_faites]
@@ -142,12 +169,13 @@ class Game():
         arbre = self.arbre_map[mission["filesystem"]]
         self.lancer_labyrinthe(arbre, mission["points"], mission["texte_blocnote"])
 
+
+
     def lancer_mission_phishing(self):
         disponibles = [k for k in MAILS if k not in self.missions_faites]
         if not disponibles:
             self.missions_faites = []
             disponibles = list(MAILS.keys())
-        
         cle = random.choice(disponibles)
         mail = MAILS[cle]
         self.mission_active = cle

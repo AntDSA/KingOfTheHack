@@ -31,6 +31,15 @@ class Bureau():
                             8, 
                             "Ouvre le bon dossier pour commencer ta mission."
                         )
+                    elif icone["cible"] == "phishing":
+                        from data.missions import MAILS
+                        game.lancer_phishing(
+                            MAILS, 
+                            8, 
+                            "Identifie le mail de phishing pour réussir la mission."
+                        )
+                    elif icone["cible"] == "cesar":
+                        pass
 
     def update(self):
         pass

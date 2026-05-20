@@ -3,7 +3,8 @@ import sys
 import setting
 from interface.bureau import Bureau
 from interface.blocnote import Blocnote
-from minijeux.labyrinthe import Labyrinthe
+import random
+from data.missions import MISSIONS_LABYRINTHE, MAILS
 from data.filesystems import LABYRINTHE_1, LABYRINTHE_2, LABYRINTHE_3
 
 class Game():
@@ -18,22 +19,29 @@ class Game():
         self.running = True
 
         self.state = "bureau"
-        # changement : state_precedent initialisé pour éviter AttributeError au démarrage. J'ai déjà eu ce problème avec une modif
         self.state_precedent = "bureau"
 
         self.BG    = (13, 13, 13)
         self.GREEN = (0, 255, 65)
-
-        self.font = p.font.SysFont("consolas", 20)
+        self.font  = p.font.SysFont("consolas", 20)
 
         colors = {"BG": self.BG, "GREEN": self.GREEN}
         self.bureau   = Bureau(self.screen, self.font, colors)
         self.blocnote = Blocnote(self.screen, self.font, colors)
         self.blocnote.set_mission("Ton PC a été infecté. Suis les instructions.", timer_secondes=120)
 
-        self.setting = setting.Setting(self.screen)
-        self.labyrinthe = None  # sera créé au lancement d'une mission
+        self.setting  = setting.Setting(self.screen)
+        self.labyrinthe = None
+        self.phishing   = None
         self.mission_points = 0
+        self.missions_faites = []
+        self.mission_active  = None
+
+        self.arbre_map = {
+            "LABYRINTHE_1": LABYRINTHE_1,
+            "LABYRINTHE_2": LABYRINTHE_2,
+            "LABYRINTHE_3": LABYRINTHE_3,
+        }
 
     def set_state(self, nouvel_etat):
         self.state_precedent = self.state
@@ -52,51 +60,51 @@ class Game():
             p.display.flip()
 
     def handle_event(self, event):
-        # changement : blocnote.handle_event appelé une seule fois (était appelé deux fois dans "bureau")
         action = self.blocnote.handle_event(event)
         if action == "home":
             self.set_state("bureau")
+            self.blocnote.afficher_choix = True
         elif action == "retour":
             self.set_state(self.state_precedent)
+            self.blocnote.afficher_choix = True
+        elif action == "mission_labyrinthe":
+            self.lancer_mission_labyrinthe()
+        elif action == "mission_phishing":
+            self.lancer_mission_phishing()
 
         if self.state == "bureau":
             self.bureau.handle_event(event, self)
         elif self.state == "labyrinthe":
             self.labyrinthe.handle_event(event, self)
         elif self.state == "phishing":
-            pass
-        elif self.state == "cesar":
-            pass
-        elif self.state == "sql":
-            pass
-        elif self.state == "fin":
-            pass
+            self.phishing.handle_event(event)
+        elif self.state == "parametre":
+            self.setting.handle_event(event)
 
     def update(self, dt):
         self.blocnote.update(dt)
         if self.state == "labyrinthe":
             self.labyrinthe.update()
+        elif self.state == "phishing":
+            self.phishing.update(dt)
 
     def draw(self):
         self.screen.fill(self.BG)
-
-        # changement : dictionnaire pour éviter la répétition des elif + texte simple
-        ecrans_simples = {
-            "phishing": "PHISHING",
-            "cesar":    "CESAR",
-            "sql":      "SQL",
-            "fin":      "FIN — le virus a disparu",
-        }
 
         if self.state == "bureau":
             self.bureau.draw()
         elif self.state == "labyrinthe":
             self.labyrinthe.draw()
-        elif self.state in ecrans_simples:
-            self.screen.blit(
-                self.font.render(ecrans_simples[self.state], True, self.GREEN),
-                (20, 20)
-            )
+        elif self.state == "phishing":
+            self.phishing.draw()
+        elif self.state == "parametre":
+            self.setting.draw()
+        elif self.state == "cesar":
+            self.screen.blit(self.font.render("CESAR", True, self.GREEN), (20, 20))
+        elif self.state == "sql":
+            self.screen.blit(self.font.render("SQL", True, self.GREEN), (20, 20))
+        elif self.state == "fin":
+            self.screen.blit(self.font.render("FIN — le virus a disparu", True, self.GREEN), (20, 20))
 
         self.blocnote.draw()
 
@@ -110,3 +118,38 @@ class Game():
         self.mission_points = points
         self.blocnote.set_mission(texte, timer_secondes=120)
         self.set_state("labyrinthe")
+
+    def lancer_phishing(self, mails, points, texte):
+        from minijeux.phishing import phishing
+        self.phishing = phishing(
+            self.screen, self.font,
+            {"BG": self.BG, "GREEN": self.GREEN},
+            mails, self
+        )
+        self.mission_points = points
+        self.blocnote.set_mission(texte, timer_secondes=120)
+        self.set_state("phishing")
+
+    def lancer_mission_labyrinthe(self):
+        disponibles = [k for k in MISSIONS_LABYRINTHE if k not in self.missions_faites]
+        if not disponibles:
+            self.missions_faites = []
+            disponibles = list(MISSIONS_LABYRINTHE.keys())
+        cle = random.choice(disponibles)
+        mission = MISSIONS_LABYRINTHE[cle]
+        self.mission_active = cle
+        self.blocnote.afficher_choix = False
+        arbre = self.arbre_map[mission["filesystem"]]
+        self.lancer_labyrinthe(arbre, mission["points"], mission["texte_blocnote"])
+
+    def lancer_mission_phishing(self):
+        disponibles = [k for k in MAILS if k not in self.missions_faites]
+        if not disponibles:
+            self.missions_faites = []
+            disponibles = list(MAILS.keys())
+        cle = random.choice(disponibles)
+        mail = MAILS[cle]
+        self.mission_active = cle
+        self.blocnote.afficher_choix = False
+        self.lancer_phishing(MAILS, mail["points"], mail["question"])
+        self.mail_actif = mail

@@ -1,7 +1,7 @@
 import pygame as p
 import sys
 import setting
-from parametre_page import ParametrePage
+from parametre import parametre
 
 from interface.bureau import Bureau
 from interface.blocnote import Blocnote

@@ -95,7 +95,7 @@ class Game():
         if self.state == "labyrinthe":
             self.labyrinthe.update()
         elif self.state == "phishing":
-            self.phishing.update()
+            self.phishing.update(dt)
 
     def draw(self):
         self.screen.fill(self.BG)

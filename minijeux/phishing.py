@@ -21,8 +21,25 @@ class Phishing():
         self.rect_panel = p.Rect(0, 0, panel_w, h)
         self.rect_titre = p.Rect(MARGE, MARGE, panel_w - 2*MARGE, 30)
 
+
+    def _items(self):
+        return list(self.position_actuelle.keys())
+
+    def _rect_item(self, index):
+        y = self.rect_liste.y + index * LIGNE_H - self.scroll_offset
+        return p.Rect(self.rect_liste.x, y, self.rect_liste.width, LIGNE_H - 3)
+
+    def _cliquer(self, nom):
+        valeur = self.position_actuelle[nom]
+
     def handle_event(self, event, game):
-        pass
+        if event.type == p.MOUSEBUTTONDOWN and event.button == 1:
+            items = self._items()
+            for i, nom in enumerate(items):
+                rect = self._rect_item(i)
+                if rect.collidepoint(event.pos) and self.rect_liste.collidepoint(event.pos):
+                    self._cliquer(nom)
+                    return
 
         if event.type == p.MOUSEWHEEL:
             if self.rect_panel.collidepoint(p.mouse.get_pos()):

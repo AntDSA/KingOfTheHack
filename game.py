@@ -95,7 +95,7 @@ class Game():
         if self.state == "labyrinthe":
             self.labyrinthe.update()
         elif self.state == "phishing":
-            self.phishing.update()
+            self.phishing.update(dt)
 
     def draw(self):
         self.screen.fill(self.BG)
@@ -123,15 +123,13 @@ class Game():
         self.blocnote.draw()
 
     def lancer_phishing(self, mails, points, texte):
+
         from minijeux.phishing import phishing
 
         self.phishing = phishing(
             self.screen,
             self.font,
-            {
-                "BG": self.BG,
-                "GREEN": self.GREEN
-            },
+            {"BG": self.BG, "GREEN": self.GREEN},
             mails,
             self
         )
@@ -172,15 +170,28 @@ class Game():
 
 
     def lancer_mission_phishing(self):
+
         disponibles = [k for k in MAILS if k not in self.missions_faites]
+
         if not disponibles:
             self.missions_faites = []
             disponibles = list(MAILS.keys())
+
         cle = random.choice(disponibles)
         mail = MAILS[cle]
+
         self.mission_active = cle
         self.blocnote.afficher_choix = False
         self.blocnote.set_mission(mail["question"], timer_secondes=120)
+
+        from minijeux.phishing import phishing
+
+        self.phishing = phishing(
+            self.screen,
+            self.font,
+            {"BG": self.BG, "GREEN": self.GREEN},
+            MAILS,
+            self
+        )
+
         self.set_state("phishing")
-        # on stocke le mail actif pour que phishing.py puisse y accéder
-        self.mail_actif = mail

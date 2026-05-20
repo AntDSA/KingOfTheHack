@@ -142,7 +142,7 @@ class Game():
 
 
 
-    def lancer_labyrinthe(self, arbre, points):
+    def lancer_labyrinthe(self, arbre, points, texte):
         from minijeux.labyrinthe import Labyrinthe
         self.labyrinthe = Labyrinthe(
             self.screen, self.font,

@@ -1,5 +1,3 @@
-# Bon on pouvait utiliser /n pour eviter une boucle dans phising. 
-
 MAILS = {
     "A1": {
         "expediteur": "contact@maif-espace-client.fr",
@@ -202,18 +200,6 @@ MAILS = {
         "type": "C",
         "points": 10
     },
-}
-
-SELECTION_FICHIERS_PHISHING = {
-    "Mail_Phishing_1": MAILS["A1"],
-    "Mail_Phishing_2": MAILS["A2"],
-    "Mail_Phishing_3": MAILS["A3"],
-    "Mail_Phishing_4": MAILS["B1"],
-    "Mail_Phishing_5": MAILS["B2"],
-    "Mail_Phishing_6": MAILS["B3"],
-    "Mail_Phishing_7": MAILS["C1"],
-    "Mail_Phishing_8": MAILS["C2"],
-    "Mail_Phishing_9": MAILS["C3"],
 }
 
 MISSIONS_LABYRINTHE = {

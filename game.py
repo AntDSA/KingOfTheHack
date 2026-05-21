@@ -137,10 +137,16 @@ class Game():
             reponse_joueur = action.strip().upper()
             if reponse_joueur == bonne_reponse:
                 self.blocnote.ajouter_points(self.mission_points)
-                self.missions_faites.append(self.mission_active)
-                self.blocnote.afficher_choix = True
-                self.blocnote.set_mission("Bien joué ! Choisis une nouvelle mission.")
-                self.set_state("bureau")
+                if reponse_joueur == bonne_reponse:
+                    self.blocnote.ajouter_points(self.mission_points)
+                    if self.blocnote.jauge >= 100:
+                        self.declencher_fin()
+                        return
+                    self.missions_faites.append(self.mission_active)
+                    self.blocnote.afficher_choix = True
+                    self.blocnote.set_mission("Bien joué ! Choisis une nouvelle mission.")
+                    self.set_state("bureau")
+
             else:
                 self.blocnote.set_mission(f"Mauvaise réponse. Réessaie.\n{self.mail_actif['question']}")
         elif action and self.state == "fin":

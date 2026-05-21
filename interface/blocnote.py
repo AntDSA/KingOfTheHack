@@ -35,9 +35,6 @@ class Blocnote():
         self.timer = timer_secondes
         self.timer_actif = timer_secondes > 0
 
-    def ajouter_points(self, points):
-        self.jauge = min(100, self.jauge + points)
-
     def update(self, dt):
         if self.timer_actif and self.timer > 0:
             self.timer -= dt

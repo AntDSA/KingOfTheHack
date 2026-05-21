@@ -116,8 +116,6 @@ class Game():
 
             p.display.flip()
 
-    # =========================================
-
     def handle_event(self, event):
         action = self.blocnote.handle_event(event)
 
@@ -155,7 +153,7 @@ class Game():
                 self.set_state("victoire")
             else:
                 self.blocnote.set_mission(
-                    f"Mauvaise réponse. Réessaie.\nWK UHSRQVH HVW 42\n(décalage : 3)"
+                    f"Mauvaise réponse. Réessaie.\nWK UHSRQVH HVW 75"
                 )
                 
         # ETATS
@@ -305,9 +303,9 @@ class Game():
         self.lancer_phishing(MAILS, mail["points"], f"De : {mail['expediteur']}\n{mail['question']}")
     
     def declencher_fin(self):
-        message_cesar = "WK UHSRQVH HVW 42"  # "LA REPONSE EST 42" décalé de 3
+        message_cesar = "WK UHSRQVH HVW 75"  # "LA REPONSE EST 42" décalé de 3
         self.blocnote.set_mission(
-            f"VIRUS ACTIF. Déchiffre le message pour te libérer :\n{message_cesar}\n(décalage : 3)",
+            f"VIRUS ACTIF. Déchiffre le message pour te libérer :\n{message_cesar}",
             timer_secondes=0
         )
         self.blocnote.afficher_choix = False

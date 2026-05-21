@@ -61,13 +61,9 @@ class Game():
             timer_secondes=120
         )
 
-        # =========================
         # PARAMETRES
-        # =========================
 
         self.setting = setting.Setting(self.screen)
-
-        # =========================
 
         self.labyrinthe = None
         self.phishing = None
@@ -83,22 +79,16 @@ class Game():
             "LABYRINTHE_1": LABYRINTHE_1,
             "LABYRINTHE_2": LABYRINTHE_2,
             "LABYRINTHE_3": LABYRINTHE_3,
-
         }
 
-    # =========================================
 
     def set_state(self, nouvel_etat):
-
         self.state_precedent = self.state
         self.state = nouvel_etat
 
-    # =========================================
 
     def run(self):
-
         while self.running:
-
             dt = self.clock.tick(60) / 1000
 
             for event in p.event.get():
@@ -144,7 +134,6 @@ class Game():
                     self.blocnote.afficher_choix = True
                     self.blocnote.set_mission("Bien joué ! Choisis une nouvelle mission.")
                     self.set_state("bureau")
-
             else:
                 self.blocnote.set_mission(f"Mauvaise réponse. Réessaie.\n{self.mail_actif['question']}")
         elif action and self.state == "fin":
@@ -155,36 +144,27 @@ class Game():
                 self.blocnote.set_mission(
                     f"Mauvaise réponse. Réessaie.\nWK UHSRQVH HVW 75"
                 )
+        if event.type == p.KEYDOWN:
+            if event.key == p.K_F12:
+                self.blocnote.jauge = 95
                 
         # ETATS
 
         if self.state == "bureau":
-
             self.bureau.handle_event(event, self)
-
         elif self.state == "parametre":
-
             self.setting.handle_event(event)
-
         elif self.state == "labyrinthe":
-
             self.labyrinthe.handle_event(event, self)
-
         elif self.state == "phishing":
-
             self.phishing.handle_event(event)
-
         elif self.state == "cesar":
-
             pass
-
         elif self.state == "sql":
-
             pass
-
         elif self.state == "fin":
-
             pass
+
 
     def update(self, dt):
 

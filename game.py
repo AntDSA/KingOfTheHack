@@ -58,7 +58,7 @@ class Game():
 
         self.blocnote.set_mission(
             "Ton PC a été infecté. Suis les instructions.",
-            timer_secondes=120
+            timer_secondes = 240
         )
 
         # PARAMETRES
@@ -285,7 +285,8 @@ class Game():
     def declencher_fin(self):
         message_cesar = "WK UHSRQVH HVW 75"  # "LA REPONSE EST 42" décalé de 3
         self.blocnote.set_mission(
-            f"VIRUS ACTIF. Déchiffre le message pour te libérer :\n{message_cesar}",
+            f"""VIRUS ACTIF. Déchiffre le message pour te libérer : 
+            {message_cesar}""",
             timer_secondes=0
         )
         self.blocnote.afficher_choix = False

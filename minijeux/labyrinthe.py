@@ -45,7 +45,7 @@ class Labyrinthe:
             self.game.set_state("bureau")
 
         elif valeur == "PERDU":
-            self.message = "Mauvaise réponse ! Retour en arrière..."
+            self.game.blocnote.set_mission("Mauvaise réponse ! Retour en arrière...", timer_secondes=0)
             if self.historique:
                 self.position_actuelle = self.historique.pop()
                 self.chemin_noms = self.chemin_noms[:-1]
@@ -96,13 +96,6 @@ class Labyrinthe:
         p.draw.line(self.screen, self.GREEN,
                     (self.rect_ariane.x, self.rect_ariane.bottom),
                     (self.rect_ariane.right, self.rect_ariane.bottom), 1)
-
-        # Message PERDU
-        if self.message:
-            self.screen.blit(
-                self.font.render(self.message, True, (255, 50, 50)),
-                (self.rect_liste.x, self.rect_liste.y - 20)
-            )
 
         # Liste des dossiers
         items  = self._items()

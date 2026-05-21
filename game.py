@@ -349,4 +349,4 @@ class Game():
         self.mission_active = cle
         self.blocnote.afficher_choix = False
         self.mail_actif = mail
-        self.lancer_phishing(MAILS, mail["points"], mail["question"])
+        self.lancer_phishing(MAILS, mail["points"], f"De : {mail['expediteur']}\n{mail['question']}")

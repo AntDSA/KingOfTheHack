@@ -119,28 +119,30 @@ class Game():
     # =========================================
 
     def handle_event(self, event):
-
         action = self.blocnote.handle_event(event)
 
         if action == "home":
-
             self.set_state("bureau")
-
             self.blocnote.afficher_choix = True
-
         elif action == "retour":
-
             self.set_state(self.state_precedent)
-
             self.blocnote.afficher_choix = True
-
         elif action == "mission_labyrinthe":
-
             self.lancer_mission_labyrinthe()
-
         elif action == "mission_phishing":
-
             self.lancer_mission_phishing()
+        elif action and self.state == "phishing" and self.mail_actif:
+            # vérification de la réponse phishing
+            bonne_reponse = self.mail_actif["reponse"].strip().upper()
+            reponse_joueur = action.strip().upper()
+            if reponse_joueur == bonne_reponse:
+                self.blocnote.ajouter_points(self.mission_points)
+                self.missions_faites.append(self.mission_active)
+                self.blocnote.afficher_choix = True
+                self.blocnote.set_mission("Bien joué ! Choisis une nouvelle mission.")
+                self.set_state("bureau")
+            else:
+                self.blocnote.set_mission(f"Mauvaise réponse. Réessaie.\n{self.mail_actif['question']}")
 
         # =========================================
         # ETATS

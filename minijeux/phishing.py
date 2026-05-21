@@ -33,6 +33,7 @@ class phishing:
         self.scroll_offset = 0
         
         self.mail_ouvert = None
+        self.rect_retour = p.Rect(0, 0, 0, 0)
 
 
 

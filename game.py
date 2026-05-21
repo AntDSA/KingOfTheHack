@@ -338,36 +338,13 @@ class Game():
     # =========================================
 
     def lancer_mission_phishing(self):
-
-        disponibles = [
-
-            k for k in MAILS
-
-            if k not in self.missions_faites
-
-        ]
-
+        disponibles = [k for k in MAILS if k not in self.missions_faites]
         if not disponibles:
-
             self.missions_faites = []
-
             disponibles = list(MAILS.keys())
-
         cle = random.choice(disponibles)
-
         mail = MAILS[cle]
-
         self.mission_active = cle
-
         self.blocnote.afficher_choix = False
-
-        self.blocnote.set_mission(
-
-            mail["question"],
-            timer_secondes=120
-
-        )
-
-        self.set_state("phishing")
-
         self.mail_actif = mail
+        self.lancer_phishing(MAILS, mail["points"], mail["question"])

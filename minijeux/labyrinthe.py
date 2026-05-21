@@ -40,7 +40,9 @@ class Labyrinthe:
 
         if valeur == "GAGNE":
             self.game.blocnote.ajouter_points(self.game.mission_points)
-            self.game.missions_faites.append(self.game.mission_active)
+            if self.game.blocnote.jauge >= 100:
+                self.game.declencher_fin()
+                return
             self.game.blocnote.afficher_choix = True
             self.game.set_state("bureau")
 

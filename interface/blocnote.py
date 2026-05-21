@@ -150,3 +150,8 @@ class Blocnote():
                 self.font.render("[Phishing]", True, self.GREEN),
                 (self.btn_phi.x + 5, self.btn_phi.y + 5)
             )
+    def ajouter_points(self, points):
+        self.jauge = min(100, self.jauge + points)
+        if self.jauge >= 100:
+            return "fin"
+        return None

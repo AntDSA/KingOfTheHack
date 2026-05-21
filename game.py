@@ -143,10 +143,16 @@ class Game():
                 self.set_state("bureau")
             else:
                 self.blocnote.set_mission(f"Mauvaise réponse. Réessaie.\n{self.mail_actif['question']}")
-
-        # =========================================
+        elif action and self.state == "fin":
+            if action.strip().upper() == "42":
+                self.blocnote.set_mission("VIRUS ÉLIMINÉ. Tu es libre.")
+                self.set_state("victoire")
+            else:
+                self.blocnote.set_mission(
+                    f"Mauvaise réponse. Réessaie.\nWK UHSRQVH HVW 42\n(décalage : 3)"
+                )
+                
         # ETATS
-        # =========================================
 
         if self.state == "bureau":
 
@@ -176,8 +182,6 @@ class Game():
 
             pass
 
-    # =========================================
-
     def update(self, dt):
 
         self.blocnote.update(dt)
@@ -190,154 +194,97 @@ class Game():
 
             self.phishing.update(dt)
 
-    # =========================================
-
     def draw(self):
-
         self.screen.fill(self.BG)
-
         ecrans_simples = {
-
             "phishing": "PHISHING",
             "cesar":    "CESAR",
             "sql":      "SQL",
             "fin":      "FIN — le virus a disparu",
-
         }
 
-        # =========================================
         # AFFICHAGE
-        # =========================================
 
         if self.state == "bureau":
-
             self.bureau.draw()
-
         elif self.state == "parametre":
-
             self.setting.draw()
-
         elif self.state == "labyrinthe":
-
             self.labyrinthe.draw()
-
         elif self.state == "phishing":
-
             self.phishing.draw()
-
         elif self.state in ecrans_simples:
-
             self.screen.blit(
-
                 self.font.render(
                     ecrans_simples[self.state],
                     True,
                     self.GREEN
                 ),
-
                 (20, 20)
-
             )
-
+        elif self.state == "victoire":
+            texte = self.font.render("LE VIRUS A DISPARU. BONNE CHANCE.", True, self.GREEN)
+            self.screen.blit(texte, (20, self.height // 2))
+        
         self.blocnote.draw()
 
-    # =========================================
-
     def lancer_phishing(self, mails, points, texte):
-
         from minijeux.phishing import phishing
-
         self.phishing = phishing(
-
             self.screen,
             self.font,
-
             {
                 "BG": self.BG,
                 "GREEN": self.GREEN
             },
-
             mails,
             self
-
         )
-
         self.mission_points = points
-
         self.blocnote.set_mission(
             texte,
             timer_secondes=120
         )
-
         self.set_state("phishing")
 
-    # =========================================
-
     def lancer_labyrinthe(self, arbre, points, texte):
-
         from minijeux.labyrinthe import Labyrinthe
-
         self.labyrinthe = Labyrinthe(
-
             self.screen,
             self.font,
-
             {
                 "BG": self.BG,
                 "GREEN": self.GREEN
             },
-
             arbre,
             self
-
         )
-
         self.mission_points = points
-
         self.blocnote.set_mission(
             texte,
             timer_secondes=120
         )
-
         self.set_state("labyrinthe")
 
-    # =========================================
-
     def lancer_mission_labyrinthe(self):
-
         disponibles = [
-
             k for k in MISSIONS_LABYRINTHE
-
             if k not in self.missions_faites
-
         ]
-
         if not disponibles:
-
             self.missions_faites = []
-
             disponibles = list(MISSIONS_LABYRINTHE.keys())
-
         cle = random.choice(disponibles)
-
         mission = MISSIONS_LABYRINTHE[cle]
-
         self.mission_active = cle
-
         self.blocnote.afficher_choix = False
-
         arbre = self.arbre_map[mission["filesystem"]]
-
         self.lancer_labyrinthe(
-
             arbre,
             mission["points"],
             mission["texte_blocnote"]
-
         )
 
-    # =========================================
 
     def lancer_mission_phishing(self):
         disponibles = [k for k in MAILS if k not in self.missions_faites]
@@ -350,3 +297,12 @@ class Game():
         self.blocnote.afficher_choix = False
         self.mail_actif = mail
         self.lancer_phishing(MAILS, mail["points"], f"De : {mail['expediteur']}\n{mail['question']}")
+    
+    def declencher_fin(self):
+        message_cesar = "WK UHSRQVH HVW 42"  # "LA REPONSE EST 42" décalé de 3
+        self.blocnote.set_mission(
+            f"VIRUS ACTIF. Déchiffre le message pour te libérer :\n{message_cesar}\n(décalage : 3)",
+            timer_secondes=0
+        )
+        self.blocnote.afficher_choix = False
+        self.set_state("fin")
